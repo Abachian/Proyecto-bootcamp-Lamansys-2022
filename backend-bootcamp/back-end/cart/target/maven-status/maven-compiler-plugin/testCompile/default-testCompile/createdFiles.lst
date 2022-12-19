@@ -1,0 +1,5 @@
+Cart\ProductDeleterTest.class
+Cart\CartCheckoutTest.class
+Cart\CartCreatorTest.class
+Cart\ProductAdderTest.class
+Cart\TotalPriceGetterTest.class

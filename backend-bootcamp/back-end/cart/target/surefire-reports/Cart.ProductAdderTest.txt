@@ -1,0 +1,18 @@
+-------------------------------------------------------------------------------
+Test set: Cart.ProductAdderTest
+-------------------------------------------------------------------------------
+Tests run: 6, Failures: 1, Errors: 0, Skipped: 0, Time elapsed: 0.016 s <<< FAILURE! - in Cart.ProductAdderTest
+productAdder_run_correct  Time elapsed: 0.009 s  <<< FAILURE!
+org.mockito.exceptions.verification.TooManyActualInvocations: 
+
+productStockStorage.findById(2L);
+Wanted 1 time:
+-> at Cart.ProductAdderTest.productAdder_run_correct(ProductAdderTest.java:59)
+But was 3 times:
+-> at ar.lamansys.cart.application.Cart.productadder.ProductAdder.validateProduct(ProductAdder.java:53)
+-> at ar.lamansys.cart.application.Cart.productadder.ProductAdder.validateProduct(ProductAdder.java:57)
+-> at ar.lamansys.cart.application.Cart.productadder.ProductAdder.lambda$run$0(ProductAdder.java:30)
+
+
+	at Cart.ProductAdderTest.productAdder_run_correct(ProductAdderTest.java:59)
+

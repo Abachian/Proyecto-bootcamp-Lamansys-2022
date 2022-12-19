@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+
+    <!-- Incluimos la config por defecto de spring -->
+	<!-- https://stackoverflow.com/a/57838843/2442481 -->
+	<!--  https://docs.spring.io/spring-boot/docs/current/reference/html/spring-boot-features.html#boot-features-custom-log-configuration -->
+    <include resource="org/springframework/boot/logging/logback/defaults.xml"/>
+	<include resource="org/springframework/boot/logging/logback/console-appender.xml" />
+
+    <!-- _____________________________ PROPIEDADES _______________________-->
+
+    <!-- Propiedad que define el logger utilizado para auditoria. Posibles valores: AUDIT_ROLLING_FILE/CONSOLE -->
+    <springProperty name="logs.type" source="auditoria.logs.type"/>
+
+    <!-- Carpeta donde se almacenan los logs -->
+    <springProperty name="logs.file.path" source="auditoria.logs.file.path"/>
+
+    <!-- Appender auditoria -->
+    <appender name="AUDIT_ROLLING_FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${logs.file.path}/audit-logger.log</file>
+        <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+        	<!-- Ver http://logback.qos.ch/manual/layouts.html#ClassicPatternLayout -->
+            <Pattern>%logger{0} %C{0} %d %m%n</Pattern>
+        </encoder>
+
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <!-- Rollover mensual ver http://logback.qos.ch/manual/appenders.html#TimeBasedRollingPolicy -->
+            <fileNamePattern>${logs.file.path}/archived/audit-log-%d{yyyy-MM}.log</fileNamePattern>
+        </rollingPolicy>
+    </appender>
+
+    <!-- Logger auditoria -->
+    <logger name="AUDIT_LOGGER" level="trace" additivity="false">
+        <appender-ref ref="${logs.type}" />
+    </logger>
+
+    <!-- Log level de root -->
+    <root level="info">
+        <appender-ref ref="CONSOLE" />
+    </root>
+
+</configuration>

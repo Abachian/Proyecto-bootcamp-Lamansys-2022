@@ -1,0 +1,5 @@
+INSERT INTO v_consumos_totales(rw,numero_afiliado,id_prestacion,fecha_consumo,id_diagnostico,id_entidad_efectora,id_prestador_efector,cantidad) VALUES (35,'2012828057000','340301', '2019-03-01','881',8,1,'1');
+INSERT INTO v_consumos_totales(rw,numero_afiliado,id_prestacion,fecha_consumo,id_diagnostico,id_entidad_efectora,id_prestador_efector,cantidad) VALUES (36,'2012828057000','400101', '2018-10-28','1982',5,2,'2');
+INSERT INTO v_consumos_totales(rw,numero_afiliado,id_prestacion,fecha_consumo,id_diagnostico,id_entidad_efectora,id_prestador_efector,cantidad) VALUES (37,'2012828057000','400101', '2019-03-02','489',7,1,'3');
+INSERT INTO v_consumos_totales(rw,numero_afiliado,id_prestacion,fecha_consumo,id_diagnostico,id_entidad_efectora,id_prestador_efector,cantidad) VALUES (38,'2012828057000','430101', '2018-10-29','621',28,2,'1');
+INSERT INTO v_consumos_totales(rw,numero_afiliado,id_prestacion,fecha_consumo,id_diagnostico,id_entidad_efectora,id_prestador_efector,cantidad) VALUES (39,'2012828057000','430101', '2019-03-05','1628',14,1,'3');

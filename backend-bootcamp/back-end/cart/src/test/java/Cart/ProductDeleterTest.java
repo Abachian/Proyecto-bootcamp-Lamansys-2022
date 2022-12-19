@@ -1,0 +1,172 @@
+package Cart;
+
+import ar.lamansys.cart.application.Cart.productadder.ProductAdder;
+import ar.lamansys.cart.application.Cart.productadder.exception.CodeProductAdderException;
+import ar.lamansys.cart.application.Cart.productadder.exception.ProductAdderException;
+import ar.lamansys.cart.application.Cart.productdeleter.ProductDeleter;
+import ar.lamansys.cart.application.Cart.productdeleter.exception.CodeProductDeleterException;
+import ar.lamansys.cart.application.Cart.productdeleter.exception.ProductDeleterException;
+import ar.lamansys.cart.application.ports.CartStorage;
+import ar.lamansys.cart.application.ports.ProductStockStorage;
+import ar.lamansys.cart.domain.cart.CartBo;
+import ar.lamansys.cart.domain.product.ProductCartBo;
+import ar.lamansys.cart.domain.product.ProductStockBo;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
+
+import java.util.HashMap;
+import java.util.Optional;
+
+import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
+import static org.assertj.core.api.AssertionsForClassTypes.catchThrowable;
+import static org.mockito.Mockito.*;
+
+@ExtendWith(MockitoExtension.class)
+public class ProductDeleterTest {
+    @Mock
+    private CartStorage cartStorage;
+
+    @Mock
+    private ProductStockStorage productStockStorage;
+
+    @InjectMocks
+    ProductDeleter productDeleter;
+
+    @Test
+    void productDeleter_run_correct() {
+        var productCart = new ProductCartBo("keyboard", "gaming keyboard", 1, 20.0, 2L);
+
+        var productCartStock = new ProductStockBo(2L, "keyboard", "gaming keyboard", 5, 20.0);
+
+        var cartProductsTest = new HashMap();
+
+        cartProductsTest.put(2L, 1);
+
+        var cartTest = new CartBo(1L, cartProductsTest, false);
+
+        when(productStockStorage.findById(2L)).thenReturn(Optional.
+                of(productCartStock));
+
+        when(cartStorage.findById(1L)).thenReturn(Optional.of(cartTest));
+
+        var id = productDeleter.
+                run(String.valueOf(cartTest.getId()), productCart.getId(), productCart.getQuantity()).get().getId();
+
+        verify(cartStorage, times(2)).findById(cartTest.getId());
+        verify(productStockStorage, times(1)).findById(productCart.getId());
+        verify(cartStorage, times(1)).save(cartTest);
+
+        assertThat(cartStorage.findById(cartTest.getId()).get().getCartProducts().isEmpty());
+    }
+    @Test
+    void product_id_not_found_in_cart_exception(){
+        var productCart = new ProductCartBo("keyboard", "gaming keyboard", 1, 20.0, 2L);
+
+        var productCartStock = new ProductStockBo(2L, "keyboard", "gaming keyboard", 5, 20.0);
+
+        var cartProductsTest = new HashMap();
+
+        cartProductsTest.put(1L, 1);
+
+        var cartTest = new CartBo(1L, cartProductsTest, false);
+
+        when(productStockStorage.findById(2L)).thenReturn(Optional.
+                of(productCartStock));
+
+        when(cartStorage.findById(1L)).thenReturn(Optional.of(cartTest));
+
+        var thrown = catchThrowable(() -> productDeleter.
+                run(String.valueOf(cartTest.getId()), productCart.getId(), productCart.getQuantity()));
+
+        assertThat(thrown).isInstanceOf(ProductDeleterException.class).
+                extracting("code").isEqualTo(CodeProductDeleterException.PRODUCT_NOT_FOUND_IN_CART);
+
+    }
+    @Test
+    void quantity_higher_than_cart_exception(){
+        var productCart = new ProductCartBo("keyboard", "gaming keyboard", 5, 20.0, 2L);
+
+        var productCartStock = new ProductStockBo(2L, "keyboard", "gaming keyboard", 5, 20.0);
+
+        var cartProductsTest = new HashMap();
+
+        cartProductsTest.put(2L, 1);
+
+        var cartTest = new CartBo(1L, cartProductsTest, false);
+
+        when(productStockStorage.findById(2L)).thenReturn(Optional.
+                of(productCartStock));
+
+        when(cartStorage.findById(1L)).thenReturn(Optional.of(cartTest));
+
+        var thrown = catchThrowable(() -> productDeleter.
+                run(String.valueOf(cartTest.getId()), productCart.getId(), productCart.getQuantity()));
+
+        assertThat(thrown).isInstanceOf(ProductDeleterException.class).
+                extracting("code").isEqualTo(CodeProductDeleterException.PRODUCT_QUANTITY_HIGHER_THAN_CART);
+
+    }
+    @Test
+    void cart_sold_exception(){
+        var productCart = new ProductCartBo("keyboard", "gaming keyboard", 5, 20.0, 2L);
+
+        var productCartStock = new ProductStockBo(2L, "keyboard", "gaming keyboard", 5, 20.0);
+
+        var cartProductsTest = new HashMap();
+
+        cartProductsTest.put(2L, 1);
+
+        var cartTest = new CartBo(1L, cartProductsTest, true);
+
+        when(productStockStorage.findById(2L)).thenReturn(Optional.
+                of(productCartStock));
+
+        when(cartStorage.findById(1L)).thenReturn(Optional.of(cartTest));
+
+        var thrown = catchThrowable(() -> productDeleter.
+                run(String.valueOf(cartTest.getId()), productCart.getId(), productCart.getQuantity()));
+
+        assertThat(thrown).isInstanceOf(ProductDeleterException.class).
+                extracting("code").isEqualTo(CodeProductDeleterException.CART_SOLD);
+
+    }
+    @Test
+    void product_id_not_found_exception(){
+        var productCart = new ProductCartBo("keyboard", "gaming keyboard", 5, 20.0, 2L);
+
+        var productCartStock = new ProductStockBo(2L, "keyboard", "gaming keyboard", 5, 20.0);
+
+        var cartProductsTest = new HashMap();
+
+        cartProductsTest.put(2L, 1);
+
+        var cartTest = new CartBo(1L, cartProductsTest, true);
+
+        when(cartStorage.findById(1L)).thenReturn(Optional.of(cartTest));
+
+        var thrown = catchThrowable(() -> productDeleter.
+                run(String.valueOf(cartTest.getId()), productCart.getId(), productCart.getQuantity()));
+
+        assertThat(thrown).isInstanceOf(ProductDeleterException.class).
+                extracting("code").isEqualTo(CodeProductDeleterException.PRODUCT_ID_NOT_FOUND);
+    }
+    @Test
+    void cart_id_not_found_exception(){
+        var productCart = new ProductCartBo("keyboard", "gaming keyboard", 5, 20.0, 2L);
+
+        var cartProductsTest = new HashMap();
+        cartProductsTest.put(2L, 1);
+
+        var cartTest = new CartBo(1L, cartProductsTest, true);
+
+        var thrown = catchThrowable(() -> productDeleter.
+                run(String.valueOf(cartTest.getId()), productCart.getId(), productCart.getQuantity()));
+
+        assertThat(thrown).isInstanceOf(ProductDeleterException.class).
+                extracting("code").isEqualTo(CodeProductDeleterException.CART_ID_NOT_FOUND);
+
+    }
+}
