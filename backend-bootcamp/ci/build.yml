@@ -1,0 +1,14 @@
+build:
+  stage: build
+  image: circleci/openjdk:11-jdk-buster-node-browsers
+  cache:
+    paths:
+      - .maven
+      - .npm
+  script:
+    - export MVN_CACHE="$(pwd)/.maven"
+    - export NPM_CACHE="$(pwd)/.npm"
+    - export MAVEN_OPTS="$MAVEN_OPTS -Dmaven.repo.local=${MVN_CACHE}"
+    - ./scripts/build-pack.sh
+    - (echo "el built-commit es $(git rev-parse HEAD)" > git-sha)
+    - cat git-sha
