@@ -1,0 +1,14 @@
+version: '3'
+services:
+  postgresql:
+    image: postgres:11
+    container_name: postgresql_bootcamp
+    environment:
+      POSTGRES_PASSWORD: Local123
+      POSTGRES_DB: bootcampDB
+    volumes:
+      - ../ci/dbapgsql/:/app/pg/
+      - ./docker-data/postgres/:/data/
+    ports:
+      - "5432:5432"
+    restart: always
