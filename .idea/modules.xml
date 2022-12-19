@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/.idea/Proyecto Lamansys.iml" filepath="$PROJECT_DIR$/.idea/Proyecto Lamansys.iml" />
+      <module fileurl="file://$PROJECT_DIR$/backend-bootcamp/back-end/app/api-rest.iml" filepath="$PROJECT_DIR$/backend-bootcamp/back-end/app/api-rest.iml" />
+      <module fileurl="file://$PROJECT_DIR$/backend-bootcamp/back-end/backend.iml" filepath="$PROJECT_DIR$/backend-bootcamp/back-end/backend.iml" />
+      <module fileurl="file://$PROJECT_DIR$/backend-bootcamp/back-end/cart/cart.iml" filepath="$PROJECT_DIR$/backend-bootcamp/back-end/cart/cart.iml" />
+      <module fileurl="file://$PROJECT_DIR$/backend-bootcamp/back-end/lamansers-parent.iml" filepath="$PROJECT_DIR$/backend-bootcamp/back-end/lamansers-parent.iml" />
+      <module fileurl="file://$PROJECT_DIR$/backend-bootcamp/back-end/sgx-backoffice/sgx-backoffice.iml" filepath="$PROJECT_DIR$/backend-bootcamp/back-end/sgx-backoffice/sgx-backoffice.iml" />
+      <module fileurl="file://$PROJECT_DIR$/backend-bootcamp/back-end/sgx-shared/sgx-shared.iml" filepath="$PROJECT_DIR$/backend-bootcamp/back-end/sgx-shared/sgx-shared.iml" />
+    </modules>
+  </component>
+</project>
